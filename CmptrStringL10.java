@@ -1,12 +1,12 @@
 // Matt Packwood, Orchard Ridge, Monday Evening Class, Fall Semester 2003
 /*
- * PA10:  Model figure MVC w/inheritance/array/String concepts 
+ * PA10:  Model figure MVC w/inheritance/array/String concepts
  * screen size 576x432
  *
  * The Applet from PA09 is modified to incorporate name Strings.
  * The user inputs a comma-delimited name set into a String array associated
  * to the figs array by index; names set to figs using index correspondence.
- *    
+ *
  * The user requests a large display via text entry of name string; the fig
  * is selected by name search.  The user can also change the name set and
  * control variable feature display via scrollbar
@@ -16,9 +16,9 @@ import java.awt.*;
 import java.applet.Applet;
 import java.awt.event.*;
 import java.util.*; // for Random class
-public class CmptrStringL10 extends Applet 
-    implements AdjustmentListener, ActionListener, MouseListener { // 3 events
 
+public class CmptrStringL10 extends Applet
+    implements AdjustmentListener, ActionListener, MouseListener { // 3 events
 	TextField inTextTF; // text input ref
 	Scrollbar ballB; // screen ball control
 	Label ballL; // ball count feedback
@@ -31,12 +31,12 @@ public class CmptrStringL10 extends Applet
 	Graphics g; // global screen ref
 	CompSys [ ] figs; // ref to array of model obj refs
 	Color FIGclr [ ]= {null, Color.yellow, Color.green, Color.cyan, // corr clrs
-		 Color.gray, Color.pink, Color.orange, Color.magenta, Color.white};     
+		 Color.gray, Color.pink, Color.orange, Color.magenta, Color.white};
 	String [ ] figNms; // ref to corr String array of StickFig names
 	int [ ] unitSales; // ref to corr count array
  	String nmInstrS= "Key set of "+ FIGS+ " names w/comma delimiters;"+
  		" press enter"; // text box instructions: no name set
- 	String dsplyInstrS= "Key fig name for big display OR key new name set"+ 
+ 	String dsplyInstrS= "Key fig name for big display OR key new name set"+
  		" of "+ FIGS+ "names; press enter"; // text box instructions: name set
 	Random r; // random obj ref
 	MatchString findIt; // ref to String search obj
@@ -47,9 +47,9 @@ public void init ( ) {
 	inTextTF.addActionListener (this);
 	ballL= new Label ("Balls= "+ ballCt); // ball ct feedback
 	add (ballL);
-	ballB= new Scrollbar (Scrollbar.HORIZONTAL, 0, 1, 0, BALLmax+ 1); // same as PEx9 
+	ballB= new Scrollbar (Scrollbar.HORIZONTAL, 0, 1, 0, BALLmax+ 1); // same as PEx9
 	add (ballB);
-	ballB.addAdjustmentListener (this); 
+	ballB.addAdjustmentListener (this);
     this.addMouseListener (this); // activate mouse events
 	r= new Random (-32767); // construct Random obj; seed for sameness
 	findIt= new MatchString ( ); // cnstrct search obj
@@ -58,7 +58,7 @@ public void init ( ) {
 		// calc base vals
 	smlSlot= scrnH /8 ;// slot height for sml fig
 	smlSz= smlSlot /6; // 20% of 7/8 slot size
-	smlX= 18; // qtr inch from left edge 
+	smlX= 18; // qtr inch from left edge
 	smlY= 40; // init to top slot
 	bigSz= scrnH / 7; // max ht
 	bigX= 150; // rt edge
@@ -66,7 +66,7 @@ public void init ( ) {
 		// construct corr arrays
 	figs= new CompSys [FIGS+ 1]; // init fig array to N+ 1
 	figNms= new String [FIGS+ 1]; // init corr name array
-	unitSales= new int [FIGS+ 1]; // init assoc sales array 
+	unitSales= new int [FIGS+ 1]; // init assoc sales array
 		// set fig colors & associated sale vals
 	for (int i= 1; i <= FIGS; i++) { // ref by traverse index
  		figs [i]= new CompSys (smlX, smlY, smlSz); // cnstrct w/tiny base vals
@@ -75,7 +75,7 @@ public void init ( ) {
 			// gen unit sales from bell-curve distribution w/avg=0, std dev=1;
 		double c= r.nextGaussian ( ); // 95% of vals are in -2 thru +2 range
 		if (c < -4) // compress outliers
-			c= -4; 
+			c= -4;
 		else if (c > 4)
 			c= 4;
 		unitSales [i]= (int) ((c+4)* 250); // scale to avg 1000, std dev 250
@@ -83,29 +83,25 @@ public void init ( ) {
 		} // end traverse
 	}
 public void paint (Graphics gg) {
-	
 	g= gg; // global screen
 	g.setFont (new Font ("SansSerif", Font.BOLD, 14)); // dressUp applet text
-	inTextTF.setText (runF ? dsplyInstrS : nmInstrS); 
+	inTextTF.setText (runF ? dsplyInstrS : nmInstrS);
 	if (runF)  // bigFig dsply request
 		dsplyBigFig ( );
 	else
 		upDateBallCt (0);
 		// upDateBallCt with zero
-		
 	for (int i= 1; i <= FIGS; i++) { // ref by traverse index
 		figs [i].dsplyFig (g); // dsply small fig on screen left side
 		g.setColor(Color.black);
 		g.drawString (""+figs [i].getName ( ), smlSz*7, figs [i].getY( ) ); // ID nxt to fig
 			// x/y here...
 		} // end traverse
-	
 	// SEE LOGIC OUTLINE
-	} 
+	}
 private void dsplyBigFig ( ) { // ref by index set in action event method
-
 	int y= figs [f].getY( ); // save model obj y for tiny, side dsply
-	// set figs[f] x/y/sz vals for big dsply 
+	// set figs[f] x/y/sz vals for big dsply
 	figs [f].setX (bigX);
 	figs [f].setY (bigY);
 	figs [f].setSz (bigSz);
@@ -116,15 +112,13 @@ private void dsplyBigFig ( ) { // ref by index set in action event method
 	figs [f].setX (smlX);
 	figs [f].setY (y);
 	figs [f].setSz (smlSz);
-	
 	// SEE LOGIC OUTLINE
 	}
 public void actionPerformed (ActionEvent e) { // only one widget...
-
 	int i; // method scope...
 	String inText= inTextTF.getText ( ); // name set string
 	inText= inText.toLowerCase ( ); // force case
-	
+
 	if (-1 == inText.indexOf(",",0) ) {
 		f = findIt.findMatch (inText,figNms);
 		if (f >= 1)
@@ -137,7 +131,7 @@ public void actionPerformed (ActionEvent e) { // only one widget...
 			{
 			showStatus ("** NO MATCH for ["+inText+"]");
 			}
-		} 
+		}
 	else {
 	StringTokenizer picker= new StringTokenizer (inText,",");
 	for (i= 1; picker.hasMoreTokens () && i <= FIGS; i++) { // trav inText
@@ -151,7 +145,7 @@ public void actionPerformed (ActionEvent e) { // only one widget...
 		for (f=1; f <= FIGS; f++) // set nms in fig objects
 			figs [f].setName (figNms [f]); // index corr
 		}
-	else { // invalid set; too small, bad delimiters, etc 
+	else { // invalid set; too small, bad delimiters, etc
 		nmF= false; // set may be corrupted
 //		msg= "INVALID name set: ["+ inText+ "]"; // for statusLn
 		showStatus ("invalid name set");
@@ -177,7 +171,7 @@ public void adjustmentValueChanged (AdjustmentEvent e) { // SB event
 	}
 public void mouseClicked (MouseEvent mE) {
     inTextTF.setText (""); // clear text field instructions
-    }    
+    }
 public void mouseReleased (MouseEvent e) { }
 public void mousePressed (MouseEvent e) { }
 public void mouseEntered (MouseEvent e) { }
@@ -197,7 +191,7 @@ public int findMatch (String srch, String tbl [ ] ) {
 	srchKey= srch.trim ( ); // trim and set global
 	arguKey= tbl; // set global
 	fnalIdx= -1; // assume unmatched
-	if (ordered) 
+	if (ordered)
 		srchOrd ( );
 	else
 		srchBrute ( );
@@ -213,9 +207,9 @@ void srchOrd ( ) { // assumes ordered tbl strings
 			fnalIdx = i; break; // set index and exit srch loop
 			}
 		} // end for
-	} // end srchOrd  loop fallOut assumes unmatched 
+	} // end srchOrd  loop fallOut assumes unmatched
 void srchBrute ( ) {	// assumes unordered tbl strings
-	for (int i = 0; i < arguKey.length; i++) 
+	for (int i = 0; i < arguKey.length; i++)
 		if (srchKey.equals (arguKey [i])){
 			fnalIdx = i; break; // match; set index & exit srch loop
 			} // endif
@@ -227,7 +221,7 @@ class CompSys { // SAME AS PEx10 plus var, set and get for String name
 // setter/getter methods for x, y, sz, id and ballCt.
 //
 	int bX, bY, bS; // base vars
-	int qS, hS, dS; // work ratio vars; yours may vary... 
+	int qS, hS, dS; // work ratio vars; yours may vary...
 	int ballCt, figId; // ball ctr and ID
 	boolean zipF; // ZIP option on/off
 	Graphics g; // class-scope screen ref
@@ -245,9 +239,9 @@ public void setX (int x) { // ** SETTER METHODS **
 	// update bX here
 	bX=x;
 	}
-public void setY (int y) { 
+public void setY (int y) {
 	bY=y;
-	}	
+	}
 public void setBallCt (int ct) {
 	// update ballCt here
 	ballCt = ct;
@@ -267,8 +261,8 @@ public void setSz (int s) {
 public void setName (String n) {
 	// update name here
 	name = n;
-	}		
-public void toglOptStat ( ) { // change toglZIP refs to toglOpt 
+	}
+public void toglOptStat ( ) { // change toglZIP refs to toglOpt
 	zipF= ! zipF;
 	}
 public boolean getOptStat ( ) {
@@ -285,28 +279,28 @@ public int getY ( ) {
 	}
 public int getID ( ) {
 	return figId;
-	}	
+	}
 public int getSz ( ) {
 	return bS;
-	}	
+	}
 public String getName ( ) {
 	return name;
-	}	
+	}
 public void dsplyFig (Graphics gg) {
 	g= gg;
 	calcRatios ( );
 	dsplyKeyBord ( );
-	dsplyPtrDev ( ); 
+	dsplyPtrDev ( );
 	dsplyCPU ( );
 	dsplyDsply ( );
 	}
-void calcRatios ( ) { 
+void calcRatios ( ) {
 	// same old same old......
 	qS= Math.round (bS/4.0f); // calc ratio vals
 	hS= Math.round (bS/2.0f); // calc ratio vals
 	dS= Math.round (bS*2.0f); // calc ratio vals
 	}
-void dsplyCPU ( ) { 
+void dsplyCPU ( ) {
 	g.setColor (sysClr); //draw stuff
 	// CPU, CD, opt ZIP
 	g.fillRect (bX, bY-bS, dS+dS+bS, bS); // CPU
@@ -349,7 +343,7 @@ void dsplyDsply ( ) {
 		case 6: 	g.setColor (Color.black);
 				g.fillOval (bX+bS+dS-(((ballCt-3)%3)*bS), bY-dS-hS, bS, bS);
 		case 5: 	g.setColor (Color.red);
-				g.fillOval (bX+bS+dS-(((ballCt-2)%3)*bS), bY-dS-hS, bS, bS);   
+				g.fillOval (bX+bS+dS-(((ballCt-2)%3)*bS), bY-dS-hS, bS, bS);
 		case 4: 	g.setColor (Color.yellow);
 				g.fillOval (bX+bS+dS-(((ballCt-1)%3)*bS), bY-dS-hS, bS, bS);
 		case 3: 	g.setColor (Color.green);
