@@ -1,5 +1,5 @@
-// Matt Packwood, Orchard Ridge, Monday Evening Class, Fall Semester 2003
-/*
+/* Matt Packwood, Orchard Ridge Campus, Monday Evening Class, Fall Semester 2003
+ *
  * PA10:  Model figure MVC w/inheritance/array/String concepts
  * screen size 576x432
  *
